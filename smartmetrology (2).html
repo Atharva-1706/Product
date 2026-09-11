@@ -1,0 +1,1584 @@
+<style>
+  :root{
+    --navy-950:#0a1220; --navy-900:#0e1a2e; --navy-800:#132443; --navy-700:#1c3158;
+    --navy-600:#294270; --slate-500:#5b6b85; --slate-400:#8393ab; --slate-300:#b3bfd1;
+    --slate-100:#eef1f6; --paper:#f7f8fb; --white:#ffffff;
+    --gold:#b8892b; --gold-light:#f0dfb8;
+    --green:#1f7a4d; --green-bg:#e6f3ec;
+    --amber:#a3690a; --amber-bg:#fbf0dd;
+    --red:#b3261e; --red-bg:#fbe9e8;
+    --blue:#1f5fa8; --blue-bg:#e8f0fa;
+    --gray-bg:#eef0f3;
+    --radius:6px;
+    --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  .sm-root{font-family:var(--sans); background:var(--paper); color:var(--navy-900); min-height:100vh; font-size:14px; line-height:1.5;}
+  .sm-root h1,.sm-root h2,.sm-root h3{font-family:var(--serif); font-weight:600; margin:0;}
+  .sm-root button{font-family:var(--sans); cursor:pointer;}
+  .sm-root input,.sm-root select,.sm-root textarea{font-family:var(--sans);}
+  .sm-hidden{display:none !important;}
+
+  /* ---- Login ---- */
+  .sm-login-wrap{min-height:100vh; display:flex; align-items:center; justify-content:center; background:
+    linear-gradient(180deg, var(--navy-950) 0%, var(--navy-900) 55%, var(--navy-800) 100%); padding:24px;}
+  .sm-login-card{width:100%; max-width:380px; background:var(--white); border-radius:var(--radius); padding:36px 32px 28px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+  .sm-login-emblem{width:44px; height:44px; border:2px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; color:var(--gold); font-family:var(--serif); font-weight:700; font-size:18px;}
+  .sm-login-title{text-align:center; font-size:20px; letter-spacing:.03em; color:var(--navy-900);}
+  .sm-login-sub{text-align:center; color:var(--slate-500); font-size:12.5px; margin-top:4px; margin-bottom:26px; letter-spacing:.02em;}
+  .sm-field{margin-bottom:16px;}
+  .sm-field label{display:block; font-size:12px; color:var(--slate-500); margin-bottom:6px; font-weight:600;}
+  .sm-field input, .sm-field select{width:100%; padding:10px 12px; border:1px solid #d8dde5; border-radius:4px; font-size:14px; background:var(--white); color:var(--navy-900);}
+  .sm-field input:focus, .sm-field select:focus{outline:2px solid var(--navy-700); outline-offset:1px; border-color:var(--navy-700);}
+  .sm-btn-primary{width:100%; background:var(--navy-900); color:#fff; border:none; padding:11px; border-radius:4px; font-size:14px; font-weight:600; letter-spacing:.02em;}
+  .sm-btn-primary:hover{background:var(--navy-800);}
+  .sm-btn-primary:disabled{opacity:.5; cursor:default;}
+  .sm-login-links{display:flex; justify-content:space-between; margin-top:14px; font-size:12.5px;}
+  .sm-login-links a, .sm-login-links label{color:var(--slate-500); cursor:pointer; text-decoration:none;}
+  .sm-login-links a:hover{color:var(--navy-800); text-decoration:underline;}
+  .sm-login-note{margin-top:22px; padding-top:16px; border-top:1px solid var(--slate-100); font-size:11.5px; color:var(--slate-400); text-align:center;}
+  .sm-demo-hint{background:var(--slate-100); border-radius:4px; padding:8px 10px; font-size:11.5px; color:var(--slate-500); margin-top:14px; text-align:center;}
+
+  /* ---- App shell ---- */
+  .sm-app{display:flex; min-height:100vh;}
+  .sm-sidebar{width:230px; background:var(--navy-950); color:var(--slate-300); flex-shrink:0; display:flex; flex-direction:column; position:sticky; top:0; height:100vh;}
+  .sm-sidebar-brand{padding:20px 18px 16px; border-bottom:1px solid var(--navy-800); display:flex; align-items:center; gap:10px;}
+  .sm-brand-mark{width:30px; height:30px; border:1.5px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--gold); font-family:var(--serif); font-weight:700; font-size:13px; flex-shrink:0;}
+  .sm-brand-text{font-family:var(--serif); font-size:14.5px; color:#fff; line-height:1.2;}
+  .sm-brand-text span{display:block; font-family:var(--sans); font-size:9.5px; color:var(--slate-400); letter-spacing:.06em; margin-top:2px;}
+  .sm-nav{flex:1; padding:12px 10px; overflow-y:auto;}
+  .sm-nav-item{display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:4px; font-size:13.2px; color:var(--slate-300); margin-bottom:2px; border-left:2px solid transparent;}
+  .sm-nav-item:hover{background:var(--navy-900); color:#fff;}
+  .sm-nav-item.active{background:var(--navy-800); color:#fff; border-left:2px solid var(--gold);}
+  .sm-nav-icon{width:16px; text-align:center; flex-shrink:0; font-size:14px;}
+  .sm-sidebar-footer{padding:14px 18px; border-top:1px solid var(--navy-800); font-size:12px;}
+  .sm-user-chip{display:flex; align-items:center; gap:9px;}
+  .sm-avatar{width:28px; height:28px; border-radius:50%; background:var(--navy-700); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:600; flex-shrink:0;}
+  .sm-user-name{color:#fff; font-size:12.5px; font-weight:600;}
+  .sm-user-role{color:var(--slate-400); font-size:11px;}
+  .sm-logout{margin-top:10px; width:100%; background:transparent; border:1px solid var(--navy-700); color:var(--slate-300); padding:6px; border-radius:4px; font-size:11.5px;}
+  .sm-logout:hover{background:var(--navy-900); color:#fff;}
+
+  .sm-main{flex:1; min-width:0; display:flex; flex-direction:column;}
+  .sm-topbar{background:#fff; border-bottom:1px solid var(--slate-100); padding:14px 26px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:5;}
+  .sm-topbar-title{font-size:18px;}
+  .sm-topbar-sub{font-size:12px; color:var(--slate-500); margin-top:2px;}
+  .sm-topbar-right{display:flex; align-items:center; gap:14px;}
+  .sm-bell{position:relative; font-size:16px; color:var(--slate-500); cursor:pointer;}
+  .sm-bell .dot{position:absolute; top:-3px; right:-3px; width:7px; height:7px; background:var(--red); border-radius:50%;}
+  .sm-content{padding:22px 26px 60px; flex:1;}
+  .sm-mobile-menu-btn{display:none;}
+
+  /* ---- Cards / grids ---- */
+  .sm-grid-stats{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:22px;}
+  .sm-stat-card{background:#fff; border:1px solid var(--slate-100); border-radius:var(--radius); padding:16px 16px 14px;}
+  .sm-stat-label{font-size:11.5px; color:var(--slate-500); font-weight:600; letter-spacing:.02em; margin-bottom:8px;}
+  .sm-stat-value{font-family:var(--serif); font-size:26px; color:var(--navy-900);}
+  .sm-stat-value.green{color:var(--green);}
+  .sm-stat-value.amber{color:var(--amber);}
+  .sm-stat-value.red{color:var(--red);}
+
+  .sm-panel{background:#fff; border:1px solid var(--slate-100); border-radius:var(--radius); padding:18px 20px; margin-bottom:18px;}
+  .sm-panel-title{font-size:14.5px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;}
+  .sm-panel-title .sm-link{font-size:12px; font-weight:600; color:var(--navy-700); font-family:var(--sans);}
+
+  .sm-row-2{display:grid; grid-template-columns:1.3fr 1fr; gap:18px;}
+
+  .sm-quick{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:22px;}
+  .sm-quick-btn{background:#fff; border:1px solid var(--slate-100); border-radius:var(--radius); padding:16px 10px; text-align:center; font-size:12.5px; font-weight:600; color:var(--navy-900);}
+  .sm-quick-btn:hover{border-color:var(--navy-700); background:var(--slate-100);}
+  .sm-quick-icon{font-size:20px; display:block; margin-bottom:6px;}
+
+  /* ---- Table ---- */
+  table.sm-table{width:100%; border-collapse:collapse; font-size:13px;}
+  table.sm-table th{text-align:left; font-size:11px; color:var(--slate-500); text-transform:uppercase; letter-spacing:.03em; padding:8px 10px; border-bottom:1.5px solid var(--slate-100); font-weight:600;}
+  table.sm-table td{padding:11px 10px; border-bottom:1px solid var(--slate-100); vertical-align:middle;}
+  table.sm-table tr:last-child td{border-bottom:none;}
+  table.sm-table tr:hover td{background:#fafbfd;}
+  .sm-table-link{color:var(--navy-800); font-weight:600; cursor:pointer;}
+  .sm-table-link:hover{text-decoration:underline;}
+
+  /* ---- Status badges ---- */
+  .sm-badge{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:20px; white-space:nowrap;}
+  .sm-badge .dot{width:6px; height:6px; border-radius:50%; flex-shrink:0;}
+  .sm-badge.compliant{background:var(--green-bg); color:var(--green);}
+  .sm-badge.compliant .dot{background:var(--green);}
+  .sm-badge.review{background:var(--amber-bg); color:var(--amber);}
+  .sm-badge.review .dot{background:var(--amber);}
+  .sm-badge.violation{background:var(--red-bg); color:var(--red);}
+  .sm-badge.violation .dot{background:var(--red);}
+  .sm-badge.processing{background:var(--blue-bg); color:var(--blue);}
+  .sm-badge.processing .dot{background:var(--blue);}
+  .sm-badge.unverified{background:var(--gray-bg); color:var(--slate-500);}
+  .sm-badge.unverified .dot{background:var(--slate-400);}
+
+  .sm-btn{border:1px solid var(--slate-100); background:#fff; padding:8px 14px; border-radius:4px; font-size:12.5px; font-weight:600; color:var(--navy-900);}
+  .sm-btn:hover{background:var(--slate-100);}
+  .sm-btn.dark{background:var(--navy-900); color:#fff; border-color:var(--navy-900);}
+  .sm-btn.dark:hover{background:var(--navy-800);}
+  .sm-btn.gold{background:var(--gold); color:#fff; border-color:var(--gold);}
+  .sm-btn.gold:hover{filter:brightness(.93);}
+  .sm-btn.ghost{background:transparent;}
+  .sm-btn.danger{color:var(--red); border-color:#f0c9c6;}
+  .sm-btn.danger:hover{background:var(--red-bg);}
+  .sm-btn.sm{padding:5px 10px; font-size:11.5px;}
+  .sm-btn:disabled{opacity:.45; cursor:default;}
+  .sm-btn-block{width:100%;}
+
+  /* Wizard */
+  .sm-steps{display:flex; align-items:center; margin-bottom:24px; overflow-x:auto;}
+  .sm-step{display:flex; align-items:center; gap:8px; flex-shrink:0;}
+  .sm-step-num{width:26px; height:26px; border-radius:50%; background:var(--slate-100); color:var(--slate-500); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0;}
+  .sm-step.done .sm-step-num{background:var(--green); color:#fff;}
+  .sm-step.active .sm-step-num{background:var(--navy-900); color:#fff;}
+  .sm-step-label{font-size:12.5px; color:var(--slate-500); font-weight:600; white-space:nowrap;}
+  .sm-step.active .sm-step-label, .sm-step.done .sm-step-label{color:var(--navy-900);}
+  .sm-step-line{width:36px; height:1px; background:var(--slate-100); margin:0 10px; flex-shrink:0;}
+
+  .sm-form-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .sm-form-grid .full{grid-column:1/-1;}
+
+  /* Upload */
+  .sm-upload-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:12px;}
+  .sm-upload-slot{border:1.5px dashed #cdd4e0; border-radius:var(--radius); aspect-ratio:4/3; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:var(--slate-500); font-size:12px; position:relative; overflow:hidden; background:#fbfcfe;}
+  .sm-upload-slot img{width:100%; height:100%; object-fit:cover; position:absolute; inset:0;}
+  .sm-upload-slot .cap{position:absolute; bottom:0; left:0; right:0; background:rgba(10,18,32,.72); color:#fff; font-size:10.5px; padding:4px 6px; display:flex; justify-content:space-between;}
+  .sm-upload-slot .cap button{background:none; border:none; color:#fff; font-size:11px; padding:0;}
+  .sm-upload-icon{font-size:22px; margin-bottom:6px;}
+  .sm-upload-slot input{position:absolute; inset:0; opacity:0; cursor:pointer;}
+
+  /* Processing */
+  .sm-processing{max-width:520px; margin:40px auto; text-align:center;}
+  .sm-proc-bar-track{background:var(--slate-100); height:8px; border-radius:20px; overflow:hidden; margin:18px 0 8px;}
+  .sm-proc-bar-fill{height:100%; background:linear-gradient(90deg,var(--navy-700),var(--gold)); border-radius:20px; transition:width .35s ease;}
+  .sm-proc-list{text-align:left; margin-top:22px; font-size:13px;}
+  .sm-proc-item{display:flex; align-items:center; gap:10px; padding:6px 0; color:var(--slate-400);}
+  .sm-proc-item.done{color:var(--navy-900);}
+  .sm-proc-item.current{color:var(--navy-900); font-weight:600;}
+  .sm-proc-check{width:16px; text-align:center; flex-shrink:0;}
+
+  /* OCR review split */
+  .sm-review-split{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  .sm-image-viewer{background:var(--navy-950); border-radius:var(--radius); overflow:hidden; position:relative;}
+  .sm-image-viewer img{width:100%; display:block;}
+  .sm-anno-box{position:absolute; border:2px solid; border-radius:3px;}
+  .sm-anno-box.ok{border-color:var(--green);}
+  .sm-anno-box.review{border-color:var(--amber);}
+  .sm-anno-box.violation{border-color:var(--red);}
+  .sm-anno-tag{position:absolute; top:-19px; left:-2px; font-size:9.5px; font-weight:700; color:#fff; padding:1px 5px; border-radius:2px; white-space:nowrap;}
+  .sm-anno-box.ok .sm-anno-tag{background:var(--green);}
+  .sm-anno-box.review .sm-anno-tag{background:var(--amber);}
+  .sm-anno-box.violation .sm-anno-tag{background:var(--red);}
+  .sm-legend{display:flex; gap:14px; padding:10px 12px; font-size:11.5px; color:var(--slate-500);}
+  .sm-legend span{display:inline-flex; align-items:center; gap:5px;}
+  .sm-legend i{width:9px; height:9px; border-radius:2px; display:inline-block;}
+
+  .sm-field-row{display:flex; justify-content:space-between; align-items:flex-start; padding:11px 0; border-bottom:1px solid var(--slate-100); gap:12px;}
+  .sm-field-row:last-child{border-bottom:none;}
+  .sm-field-name{font-size:11.5px; color:var(--slate-500); font-weight:600;}
+  .sm-field-val{font-size:14.5px; font-weight:600; margin-top:2px;}
+  .sm-field-meta{text-align:right; font-size:11px; color:var(--slate-500); white-space:nowrap;}
+  .sm-conf{font-weight:700;}
+  .sm-conf.hi{color:var(--green);}
+  .sm-conf.mid{color:var(--amber);}
+  .sm-conf.lo{color:var(--red);}
+
+  /* checklist */
+  .sm-check-row{display:grid; grid-template-columns:1.6fr .6fr .6fr .8fr; gap:10px; align-items:center; padding:9px 0; border-bottom:1px solid var(--slate-100); font-size:13px;}
+  .sm-check-row.head{font-size:11px; color:var(--slate-500); font-weight:700; text-transform:uppercase; letter-spacing:.02em;}
+
+  /* violation card */
+  .sm-viol-card{border:1px solid var(--slate-100); border-left:3px solid var(--red); border-radius:var(--radius); padding:16px 18px; margin-bottom:14px;}
+  .sm-viol-card.medium{border-left-color:var(--amber);}
+  .sm-viol-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;}
+  .sm-viol-title{font-size:14px; font-weight:700;}
+  .sm-viol-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; font-size:12.5px; margin-bottom:12px;}
+  .sm-viol-grid div span{display:block; color:var(--slate-500); font-size:10.5px; text-transform:uppercase; letter-spacing:.02em; margin-bottom:2px;}
+  .sm-viol-actions{display:flex; gap:8px; flex-wrap:wrap;}
+  .sm-viol-actions .sm-btn.sel{background:var(--navy-900); color:#fff;}
+
+  .sm-score-hero{display:flex; align-items:center; gap:28px; padding:8px 4px 18px;}
+  .sm-score-circle{width:110px; height:110px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; flex-direction:column; border:6px solid var(--slate-100); position:relative;}
+  .sm-score-num{font-family:var(--serif); font-size:28px;}
+  .sm-score-sub{font-size:9px; color:var(--slate-500); letter-spacing:.02em;}
+
+  .sm-note{background:var(--amber-bg); border:1px solid #ecd9ae; border-radius:4px; padding:10px 12px; font-size:12px; color:#7a5209; margin:8px 0 16px;}
+  .sm-note.blue{background:var(--blue-bg); border-color:#c7dcf3; color:#1a4a80;}
+  .sm-disclaimer{font-size:11px; color:var(--slate-500); font-style:italic; border-top:1px solid var(--slate-100); padding-top:12px; margin-top:14px;}
+
+  .sm-search-bar{display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;}
+  .sm-search-bar input, .sm-search-bar select{padding:9px 12px; border:1px solid #d8dde5; border-radius:4px; font-size:13px;}
+  .sm-search-bar input{flex:1; min-width:180px;}
+
+  .sm-tag-cat{background:var(--gray-bg); color:var(--navy-800); font-size:11px; font-weight:600; padding:2px 8px; border-radius:20px;}
+
+  .sm-product-card{display:flex; gap:14px; border:1px solid var(--slate-100); border-radius:var(--radius); padding:14px; margin-bottom:10px; cursor:pointer;}
+  .sm-product-card:hover{border-color:var(--navy-700);}
+  .sm-product-thumb{width:56px; height:56px; border-radius:6px; background:var(--slate-100); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--slate-400);}
+
+  .sm-timeline{border-left:2px solid var(--slate-100); margin-left:6px; padding-left:20px;}
+  .sm-timeline-item{position:relative; padding-bottom:20px;}
+  .sm-timeline-item::before{content:''; position:absolute; left:-25.5px; top:3px; width:9px; height:9px; border-radius:50%; background:var(--navy-700);}
+  .sm-timeline-date{font-size:11px; color:var(--slate-500); font-weight:600;}
+  .sm-timeline-desc{font-size:13px; margin-top:2px;}
+
+  .sm-modal-bg{position:fixed; inset:0; background:rgba(10,18,32,.55); display:flex; align-items:center; justify-content:center; z-index:50; padding:20px;}
+  .sm-modal{background:#fff; border-radius:8px; max-width:640px; width:100%; max-height:88vh; overflow-y:auto; padding:24px;}
+
+  .sm-rule-row{padding:12px 0; border-bottom:1px solid var(--slate-100); font-size:13px;}
+  .sm-rule-id{font-family:monospace; font-size:11.5px; color:var(--slate-500);}
+
+  .sm-report-page{background:#fff; border:1px solid var(--slate-100); max-width:760px; margin:0 auto; padding:40px 44px;}
+  .sm-report-header{display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid var(--navy-900); padding-bottom:14px; margin-bottom:20px;}
+  .sm-report-sec{margin-bottom:22px;}
+  .sm-report-sec h3{font-size:13px; text-transform:uppercase; letter-spacing:.04em; color:var(--navy-700); border-bottom:1px solid var(--slate-100); padding-bottom:6px; margin-bottom:10px;}
+  .sm-report-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; font-size:13px;}
+  .sm-report-grid div span{display:block; font-size:10.5px; color:var(--slate-500); text-transform:uppercase;}
+
+  .sm-empty{text-align:center; padding:50px 20px; color:var(--slate-500);}
+  .sm-empty .big{font-size:34px; margin-bottom:10px;}
+
+  .sm-toast-wrap{position:fixed; top:20px; right:20px; z-index:100; display:flex; flex-direction:column; gap:10px;}
+  .sm-toast{background:var(--navy-900); color:#fff; padding:11px 16px; border-radius:6px; font-size:12.5px; box-shadow:0 8px 24px rgba(0,0,0,.25); display:flex; align-items:center; gap:8px; min-width:220px;}
+  .sm-toast.violation{background:var(--red);}
+  .sm-toast.ok{background:var(--green);}
+
+  .sm-sync-banner{background:var(--amber-bg); border-bottom:1px solid #ecd9ae; color:#7a5209; font-size:12.5px; padding:8px 26px; display:flex; justify-content:space-between; align-items:center;}
+
+  @media (max-width: 880px){
+    .sm-sidebar{position:fixed; left:-240px; z-index:40; transition:left .2s ease; box-shadow:10px 0 30px rgba(0,0,0,.2);}
+    .sm-sidebar.open{left:0;}
+    .sm-mobile-menu-btn{display:block; background:none; border:none; font-size:18px; margin-right:10px; color:var(--navy-900);}
+    .sm-grid-stats{grid-template-columns:repeat(2,1fr);}
+    .sm-quick{grid-template-columns:repeat(2,1fr);}
+    .sm-row-2{grid-template-columns:1fr;}
+    .sm-review-split{grid-template-columns:1fr;}
+    .sm-form-grid{grid-template-columns:1fr;}
+    .sm-upload-grid{grid-template-columns:repeat(2,1fr);}
+    .sm-viol-grid{grid-template-columns:1fr 1fr;}
+    .sm-content{padding:16px;}
+    .sm-topbar{padding:12px 16px;}
+    .sm-overlay-scrim{position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:35;}
+  }
+</style>
+
+<div id="sm-app-root" class="sm-root"></div>
+
+<script>
+(function(){
+
+/* ============================= MOCK DATA ============================= */
+
+const CATEGORIES = ["Food & Beverage","Cosmetics","Household Chemicals","Personal Care","Stationery","Other"];
+
+const OFFICERS = [
+  {id:"OFC-102", name:"R. Sharma", role:"inspector"},
+  {id:"OFC-118", name:"A. Verma", role:"inspector"},
+  {id:"OFC-096", name:"P. Nair", role:"senior"},
+  {id:"OFC-140", name:"S. Iyer", role:"inspector"},
+];
+
+const RULES = [
+  {id:"Rule 1", title:"Short title and commencement", desc:"Names these Rules the Legal Metrology (Packaged Commodities) Rules, 2011, and sets out the date on which they came into force."},
+  {id:"Rule 2", title:"Definitions", desc:"Defines key terms used throughout the Rules, such as pre-packed commodity, retail package, wholesale package, principal display panel, and similar terms."},
+  {id:"Rule 3", title:"Applicability of Chapter II", desc:"Sets out which packages Chapter II's declaration and packaging requirements apply to, and lists categories of packages that are outside its scope."},
+  {id:"Rule 4", title:"Regulation for pre-packing and sale of commodities in packaged form", desc:"Requires that every pre-packed commodity offered for sale carry the declarations mandated elsewhere in these Rules."},
+  {id:"Rule 5", title:"Specific commodities to be packed and sold in standard packages", desc:"Requires certain commodities to be packed and sold only in the standard quantities listed in the Second Schedule."},
+  {id:"Rule 6", title:"Declarations to be made on every package", desc:"Lists the core mandatory declarations on every package: manufacturer/packer/importer name and address, common name of the commodity, net quantity, month and year of manufacture, retail sale price, and consumer-care details."},
+  {id:"Rule 7", title:"Principal display panel – area, size and letters", desc:"Prescribes the minimum area of the principal display panel and the minimum letter/numeral height for declarations, scaled to package size."},
+  {id:"Rule 8", title:"Where declarations should appear", desc:"Specifies which declarations must appear on the principal display panel and which may appear elsewhere on the package."},
+  {id:"Rule 9", title:"Manner in which declarations shall be made", desc:"Sets formatting requirements for declarations — that they be clear, conspicuous, unobstructed, and in the permitted language(s)."},
+  {id:"Rule 10", title:"Declaration of name and address of manufacturer, packer, importer, etc.", desc:"Details how the manufacturer, packer, or importer must be identified, including special provisions where packing is done on behalf of another person."},
+  {id:"Rule 11", title:"General provisions relating to declaration of quantity", desc:"Establishes the general principles for declaring net quantity, including the use of standard units of weight, measure, or number."},
+  {id:"Rule 12", title:"Manner in which declaration of quantity shall be made", desc:"Specifies how net quantity must be expressed — by weight for solids, volume for liquids, or count for numbered items — including rules for combination packs."},
+  {id:"Rule 13", title:"Statement of units of weight, measure or number", desc:"Requires quantity to be stated in prescribed standard units (e.g. grams/kilograms, millilitres/litres, or numerically) and disallows misleading or approximate figures."},
+  {id:"Rule 14", title:"Declaration regarding dimensions of certain commodities", desc:"Requires certain commodities, such as cloth or rope, to declare length or other dimensions alongside quantity."},
+  {id:"Rule 15", title:"Declaration regarding dimensions and weight in certain cases", desc:"Sets additional dimension and weight declaration requirements for specific categories of commodities."},
+  {id:"Rule 16", title:"Declaration of number of usable sheets", desc:"For products such as exercise books or notepads, requires a declaration of the number of usable leaves or sheets."},
+  {id:"Rule 17", title:"Declaration regarding dimensions of container-type commodities", desc:"Requires declaration of capacity or dimensions for commodities sold as containers."},
+  {id:"Rule 18", title:"Provisions relating to wholesale and retail dealers", desc:"Sets obligations for wholesale and retail dealers, including maintaining records and ensuring packages they sell carry the required declarations."},
+  {id:"Rule 19", title:"Inspection of quantity and errors at manufacturer/packer premises", desc:"Empowers inspectors to check declared versus actual quantity, and permissible errors, at a manufacturer's or packer's premises."},
+  {id:"Rule 20", title:"Action after inspection at manufacturer/packer premises", desc:"Specifies the action an inspector may take — such as seizure or a sale prohibition — after an inspection reveals non-compliance."},
+  {id:"Rule 21", title:"Inspection of quantity and errors at wholesale/retail dealer premises", desc:"Grants similar inspection powers, but applied at wholesale or retail dealer premises rather than at the manufacturer level."},
+  {id:"Rule 22", title:"Establishment of maximum permissible error", desc:"Refers to the tolerance limits in the First Schedule to determine how much declared and actual quantity are allowed to differ."},
+  {id:"Rule 23", title:"Deceptive packages – repacking or seizure", desc:"Addresses packages that give a misleading impression of containing more than their declared quantity, and allows authorities to require repacking or to seize them."},
+  {id:"Rule 24", title:"Declarations applicable to wholesale packages", desc:"Sets out the declarations that wholesale packages must carry, distinct from those required on retail packages."},
+  {id:"Rule 25", title:"Restrictions on sale of export packages in India", desc:"Prohibits packages intended for export — which may not meet these domestic declaration requirements — from being sold within India."},
+  {id:"Rule 26", title:"Exemption in respect of certain packages", desc:"Lists categories of packages, such as very small packs or certain raw produce, that are exempted from some or all declaration requirements."},
+  {id:"Rule 27", title:"Registration of manufacturers, packers and importers", desc:"Requires manufacturers, packers, and importers of pre-packaged commodities to register with the relevant Legal Metrology authority."},
+  {id:"Rule 28", title:"Registration of shorter address", desc:"Allows a manufacturer to register an abbreviated name or address for use on packages, in place of the full registered details."},
+  {id:"Rule 29", title:"Registration of manufacturers and packers, etc.", desc:"Sets out the procedure and requirements for registering as a manufacturer, packer, or importer."},
+  {id:"Rule 30", title:"Compilation and circulation of lists of manufacturers/packers", desc:"Provides for the authorities to compile and share lists of registered manufacturers, packers, and importers."},
+  {id:"Rule 31", title:"Requirements for advertisements mentioning retail sale price", desc:"Requires that any advertisement stating a commodity's retail sale price also state its net quantity."},
+  {id:"Rule 32", title:"Penalty for contravention of Rules", desc:"Sets out the penalties that apply for contravening these Rules, read together with the Legal Metrology Act, 2009."},
+  {id:"Rule 33", title:"Power to relax", desc:"Allows the central government to relax the application of these Rules for a specified class of packages in the public interest."},
+  {id:"Rule 34", title:"Repeal and savings", desc:"Repeals the earlier Standards of Weights and Measures (Packaged Commodities) Rules, 1977, subject to savings provisions for actions already taken under them."},
+];
+
+const SCHEDULES = [
+  {id:"First Schedule", title:"Maximum permissible errors", desc:"Sets the tolerance limits allowed between a package's declared and actual net quantity, varying by quantity range."},
+  {id:"Second Schedule", title:"Commodities to be packed in specified quantities", desc:"Lists specific commodities that may only be sold in the prescribed standard pack sizes."},
+  {id:"Third Schedule", title:"Commodities where quantity may be declared as \u201cwhen packed\u201d", desc:"Lists commodities — typically ones that lose weight or moisture over time — permitted to declare quantity as at the time of packing rather than at the time of sale."},
+  {id:"Fourth Schedule", title:"Special provisions for declaration of quantity", desc:"Sets out special or additional quantity-declaration requirements for particular categories of commodities."},
+  {id:"Fifth Schedule", title:"Sampling procedure", desc:"Prescribes the statistical sampling method inspectors must use when testing a batch or lot of packages."},
+  {id:"Sixth Schedule", title:"Method of testing", desc:"Details the technical procedure used to test and verify a package's actual content against its declared net quantity."},
+  {id:"Seventh Schedule", title:"Inspection/test report format", desc:"Provides the standard format used to record the results of an inspection or test."},
+];
+
+const PRODUCT_NAMES = [
+  {name:"Golden Crunch Biscuits", brand:"ABC Foods", mfr:"ABC Foods Pvt. Ltd.", cat:"Food & Beverage", icon:"🍪"},
+  {name:"Herbal Glow Face Wash", brand:"Naturia", mfr:"Naturia Cosmetics Ltd.", cat:"Cosmetics", icon:"🧴"},
+  {name:"PowerClean Floor Cleaner", brand:"HomeShine", mfr:"HomeShine Chemicals Pvt. Ltd.", cat:"Household Chemicals", icon:"🧽"},
+  {name:"SilkTouch Shampoo 200ml", brand:"Lumière", mfr:"Lumière Personal Care Ltd.", cat:"Personal Care", icon:"🧴"},
+  {name:"WriteWell Gel Pens (Pack of 5)", brand:"WriteWell", mfr:"WriteWell Stationers Pvt. Ltd.", cat:"Stationery", icon:"🖊️"},
+  {name:"Masala Munch Namkeen", brand:"Swaad", mfr:"Swaad Snacks Pvt. Ltd.", cat:"Food & Beverage", icon:"🥨"},
+  {name:"FreshMint Toothpaste 100g", brand:"DentoCare", mfr:"DentoCare Labs Ltd.", cat:"Personal Care", icon:"🪥"},
+  {name:"ShineBright Detergent Powder 1kg", brand:"CleanEdge", mfr:"CleanEdge Industries Pvt. Ltd.", cat:"Household Chemicals", icon:"🧺"},
+  {name:"Organic Honey 250g", brand:"PureHarvest", mfr:"PureHarvest Foods Pvt. Ltd.", cat:"Food & Beverage", icon:"🍯"},
+  {name:"Velvet Matte Lipstick", brand:"Cherie", mfr:"Cherie Cosmetics Ltd.", cat:"Cosmetics", icon:"💄"},
+];
+
+function seededRandom(seed){ let s = seed % 2147483647; if (s<=0) s+=2147483646;
+  return function(){ s = (s*16807) % 2147483647; return (s-1)/2147483646; }; }
+const rnd = seededRandom(19837);
+function pick(arr){ return arr[Math.floor(rnd()*arr.length)]; }
+function randInt(a,b){ return Math.floor(rnd()*(b-a+1))+a; }
+
+const VIOLATION_TYPES = [
+  {field:"MRP", cat:"MRP Issue", rule:"LM-PC-05", desc:"MRP declaration not clearly detected, or 'inclusive of all taxes' phrase missing."},
+  {field:"Net Quantity", cat:"Net Quantity Issue", rule:"LM-PC-03", desc:"Net quantity unit format could not be confidently validated."},
+  {field:"Manufacturer Address", cat:"Manufacturer/Address Issue", rule:"LM-PC-01", desc:"Manufacturer address appears incomplete or partially obscured."},
+  {field:"Manufacturing Date", cat:"Date Declaration Issue", rule:"LM-PC-04", desc:"Month/year of manufacture not detected in a valid format."},
+  {field:"Consumer Care", cat:"Consumer Care Issue", rule:"LM-PC-06", desc:"Consumer care contact details not detected on package."},
+  {field:"Font Size", cat:"Readability Issue", rule:"LM-PC-07", desc:"Estimated character height appears below the expected threshold for this package area."},
+  {field:"Field Placement", cat:"Placement Issue", rule:"LM-PC-08", desc:"Mandatory declarations do not appear together in a single field of vision."},
+];
+
+function buildInspections(){
+  const list = [];
+  for(let i=0; i<20; i++){
+    const p = PRODUCT_NAMES[i % PRODUCT_NAMES.length];
+    const officer = pick(OFFICERS.filter(o=>o.role==="inspector"));
+    const day = 28 - (i % 28); const month = i < 10 ? "Aug" : "Sep"; const year = 2026;
+    const roll = rnd();
+    let status, score, violations = [];
+    if(roll < 0.62){ status="compliant"; score = randInt(90,99); }
+    else if(roll < 0.87){ status="review"; score = randInt(70,89);
+      const v = pick(VIOLATION_TYPES); violations.push({...v, severity:"Low", confidence: randInt(80,92)});
+    } else { status="violation"; score = randInt(45,69);
+      const n = randInt(1,2);
+      const shuffled = [...VIOLATION_TYPES].sort(()=>rnd()-0.5);
+      for(let k=0;k<n;k++) violations.push({...shuffled[k], severity: k===0?"High":"Medium", confidence: randInt(85,97)});
+    }
+    list.push({
+      id: `INS-${(2000+i).toString()}`,
+      product: p.name, brand:p.brand, manufacturer:p.mfr, category:p.cat, icon:p.icon,
+      inspector: officer.name, inspectorId: officer.id,
+      date: `${day} ${month} ${year}`,
+      location: pick(["Indore Central Market","Vijay Nagar Retail Hub","Rajwada Bazaar","MG Road Commercial Zone","Bhawarkuan Market"]),
+      score, status, violations, batch: `B${randInt(1000,9999)}-${year}`,
+      finalized: true,
+    });
+  }
+  return list.sort((a,b)=> b.id.localeCompare(a.id));
+}
+
+const DEMO_INSPECTIONS = buildInspections();
+
+/* ============================= APP STATE ============================= */
+
+const state = {
+  authed: false,
+  user: null,
+  view: "dashboard",
+  sidebarOpen: false,
+  detailInspectionId: null,
+  detailProductIdx: null,
+  pendingSync: 2,
+  toasts: [],
+  newInspection: null, // wizard state
+  storedInspections: [], // loaded from window.storage
+  ruleModalId: null,
+};
+
+const NAV_ITEMS = [
+  {id:"dashboard", label:"Dashboard", icon:"◧"},
+  {id:"new-inspection", label:"New Inspection", icon:"＋"},
+  {id:"inspections", label:"Inspections", icon:"▤"},
+  {id:"products", label:"Products", icon:"▣"},
+  {id:"violations", label:"Violations", icon:"⚠"},
+  {id:"reports", label:"Reports", icon:"▦"},
+  {id:"analytics", label:"Analytics", icon:"◔"},
+  {id:"rules", label:"Rule Library", icon:"§"},
+  {id:"users", label:"Users", icon:"◍"},
+  {id:"settings", label:"Settings", icon:"⚙"},
+];
+
+function initials(name){ return name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase(); }
+
+function allInspections(){ return [...state.storedInspections, ...DEMO_INSPECTIONS]; }
+
+async function loadStorage(){
+  try{
+    const r = await window.storage.get("smartmetrology:inspections", false);
+    if(r && r.value) state.storedInspections = JSON.parse(r.value);
+  }catch(e){ state.storedInspections = []; }
+}
+async function saveStorage(){
+  try{ await window.storage.set("smartmetrology:inspections", JSON.stringify(state.storedInspections), false); }catch(e){}
+}
+
+function showToast(msg, kind){
+  const id = Date.now()+Math.random();
+  state.toasts.push({id, msg, kind});
+  render();
+  setTimeout(()=>{ state.toasts = state.toasts.filter(t=>t.id!==id); render(); }, 3600);
+}
+
+/* ============================= RENDER HELPERS ============================= */
+
+function statusBadge(status){
+  const map = {
+    compliant:["compliant","Compliant"], review:["review","Requires Review"],
+    violation:["violation","Potential Violation"], processing:["processing","Processing"],
+    unverified:["unverified","Not Verified"],
+  };
+  const [cls,label] = map[status] || map.unverified;
+  return `<span class="sm-badge ${cls}"><span class="dot"></span>${label}</span>`;
+}
+
+function confClass(c){ return c>=93?"hi":c>=80?"mid":"lo"; }
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+/* ============================= VIEWS ============================= */
+
+function renderLogin(){
+  return `
+  <div class="sm-login-wrap">
+    <div class="sm-login-card">
+      <div class="sm-login-emblem">SM</div>
+      <div class="sm-login-title">SMARTMETROLOGY&nbsp;AI</div>
+      <div class="sm-login-sub">Legal Metrology Enforcement Portal</div>
+      <form id="sm-login-form">
+        <div class="sm-field">
+          <label>Officer ID / Email</label>
+          <input type="text" id="sm-login-id" value="OFC-102" required />
+        </div>
+        <div class="sm-field">
+          <label>Password</label>
+          <input type="password" id="sm-login-pass" value="••••••••" required />
+        </div>
+        <button type="submit" class="sm-btn-primary">Login</button>
+      </form>
+      <div class="sm-login-links">
+        <a>Forgot password</a>
+        <label><input type="checkbox" checked style="vertical-align:middle;margin-right:4px;" />Remember me</label>
+      </div>
+      <div class="sm-demo-hint">Demo mode — any Officer ID / password signs in as R. Sharma (Inspector).</div>
+      <div class="sm-login-note">Government of India · Department of Consumer Affairs<br/>Legal Metrology Division — Authorized Personnel Only</div>
+    </div>
+  </div>`;
+}
+
+function renderSidebar(){
+  return `
+  <div class="sm-sidebar ${state.sidebarOpen ? 'open':''}" id="sm-sidebar">
+    <div class="sm-sidebar-brand">
+      <div class="sm-brand-mark">SM</div>
+      <div class="sm-brand-text">SmartMetrology AI<span>ENFORCEMENT PORTAL</span></div>
+    </div>
+    <div class="sm-nav">
+      ${NAV_ITEMS.map(n=>`
+        <div class="sm-nav-item ${state.view===n.id?'active':''}" data-nav="${n.id}">
+          <span class="sm-nav-icon">${n.icon}</span>${n.label}
+        </div>`).join("")}
+    </div>
+    <div class="sm-sidebar-footer">
+      <div class="sm-user-chip">
+        <div class="sm-avatar">${initials(state.user.name)}</div>
+        <div>
+          <div class="sm-user-name">${esc(state.user.name)}</div>
+          <div class="sm-user-role">${esc(state.user.id)} · Inspector</div>
+        </div>
+      </div>
+      <button class="sm-logout" id="sm-logout-btn">Log out</button>
+    </div>
+  </div>
+  ${state.sidebarOpen ? '<div class="sm-overlay-scrim" id="sm-scrim"></div>' : ''}
+  `;
+}
+
+function topbarTitle(){
+  const map = {
+    dashboard:["Dashboard","Overview of enforcement activity"],
+    "new-inspection":["New Inspection","Start a packaged-commodity compliance check"],
+    inspections:["Inspections","Search and review inspection records"],
+    products:["Products","Registered product profiles and compliance history"],
+    violations:["Violations","Findings pending or confirmed across inspections"],
+    reports:["Reports","Generated inspection reports"],
+    analytics:["Analytics","Enforcement trends across categories and manufacturers"],
+    rules:["Rule Library","Configured Legal Metrology declaration rules"],
+    users:["Users","Manage officer accounts and roles"],
+    settings:["Settings","Portal and account preferences"],
+  };
+  const [t,s] = map[state.view] || ["",""];
+  return `<div><div class="sm-topbar-title">${t}</div><div class="sm-topbar-sub">${s}</div></div>`;
+}
+
+function renderTopbar(){
+  return `
+  <div class="sm-topbar">
+    <div style="display:flex;align-items:center;">
+      <button class="sm-mobile-menu-btn" id="sm-menu-toggle">☰</button>
+      ${topbarTitle()}
+    </div>
+    <div class="sm-topbar-right">
+      <div class="sm-bell" title="Notifications">🔔<span class="dot"></span></div>
+      <div class="sm-avatar" style="width:30px;height:30px;">${initials(state.user.name)}</div>
+    </div>
+  </div>`;
+}
+
+function renderDashboard(){
+  const insp = allInspections();
+  const total = insp.length;
+  const compliant = insp.filter(i=>i.status==="compliant").length;
+  const review = insp.filter(i=>i.status==="review").length;
+  const viol = insp.filter(i=>i.status==="violation").length;
+  const rate = total? Math.round((compliant/total)*1000)/10 : 0;
+  const recent = insp.slice(0,6);
+
+  const violCounts = {};
+  insp.forEach(i=> i.violations.forEach(v=>{ violCounts[v.cat] = (violCounts[v.cat]||0)+1; }));
+  const violEntries = Object.entries(violCounts).sort((a,b)=>b[1]-a[1]);
+  const maxV = Math.max(1, ...violEntries.map(e=>e[1]));
+
+  return `
+  ${state.pendingSync>0 ? `
+  <div class="sm-sync-banner">
+    <span>📡 ${state.pendingSync} inspection${state.pendingSync>1?'s':''} pending synchronization (captured offline).</span>
+    <button class="sm-btn sm" id="sm-sync-btn" style="background:#fff;">Sync Inspections</button>
+  </div>` : ''}
+  <div class="sm-content">
+    <div class="sm-quick">
+      <div class="sm-quick-btn" data-nav="new-inspection"><span class="sm-quick-icon">📷</span>Scan Product</div>
+      <div class="sm-quick-btn" data-nav="new-inspection"><span class="sm-quick-icon">📁</span>Upload Product</div>
+      <div class="sm-quick-btn" data-nav="inspections"><span class="sm-quick-icon">📋</span>View Inspections</div>
+      <div class="sm-quick-btn" data-nav="violations"><span class="sm-quick-icon">⚠️</span>Review Violations</div>
+      <div class="sm-quick-btn" data-nav="analytics"><span class="sm-quick-icon">📊</span>Analytics</div>
+    </div>
+
+    <div class="sm-grid-stats">
+      <div class="sm-stat-card"><div class="sm-stat-label">TOTAL INSPECTIONS</div><div class="sm-stat-value">${total.toLocaleString()}</div></div>
+      <div class="sm-stat-card"><div class="sm-stat-label">COMPLIANT</div><div class="sm-stat-value green">${compliant}</div></div>
+      <div class="sm-stat-card"><div class="sm-stat-label">REQUIRES REVIEW</div><div class="sm-stat-value amber">${review}</div></div>
+      <div class="sm-stat-card"><div class="sm-stat-label">POTENTIAL VIOLATIONS</div><div class="sm-stat-value red">${viol}</div></div>
+      <div class="sm-stat-card"><div class="sm-stat-label">COMPLIANCE RATE</div><div class="sm-stat-value">${rate}%</div></div>
+    </div>
+
+    <div class="sm-row-2">
+      <div class="sm-panel">
+        <div class="sm-panel-title">Compliance Overview</div>
+        <div style="display:flex; align-items:flex-end; gap:22px; height:150px; padding:0 6px;">
+          ${[["Compliant",compliant,"var(--green)"],["Review",review,"var(--amber)"],["Violation",viol,"var(--red)"]].map(([label,val,color])=>`
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;">
+              <div style="font-size:12px;font-weight:700;margin-bottom:6px;">${val}</div>
+              <div style="width:100%; max-width:64px; background:${color}; border-radius:4px 4px 0 0; height:${Math.max(6,(val/total)*120)}px;"></div>
+              <div style="font-size:11.5px; color:var(--slate-500); margin-top:8px; font-weight:600;">${label}</div>
+            </div>`).join("")}
+        </div>
+      </div>
+      <div class="sm-panel">
+        <div class="sm-panel-title">Violation Distribution</div>
+        ${violEntries.length===0 ? '<div style="color:var(--slate-500);font-size:13px;">No violations recorded.</div>' :
+          violEntries.map(([label,val])=>`
+          <div style="margin-bottom:9px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>${label}</span><span style="font-weight:700;">${val}</span></div>
+            <div style="background:var(--slate-100); height:7px; border-radius:20px;"><div style="background:var(--navy-700); width:${(val/maxV)*100}%; height:100%; border-radius:20px;"></div></div>
+          </div>`).join("")}
+      </div>
+    </div>
+
+    <div class="sm-panel">
+      <div class="sm-panel-title">Recent Inspections <span class="sm-link" data-nav="inspections">View all →</span></div>
+      <table class="sm-table">
+        <thead><tr><th>Product</th><th>Inspector</th><th>Date</th><th>Score</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          ${recent.map(i=>`
+            <tr>
+              <td>${i.icon} ${esc(i.product)}</td>
+              <td>${esc(i.inspector)}</td>
+              <td>${i.date}</td>
+              <td>${i.score}%</td>
+              <td>${statusBadge(i.status)}</td>
+              <td><span class="sm-table-link" data-view-inspection="${i.id}">View</span></td>
+            </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+/* ---- New Inspection Wizard ---- */
+
+const WIZARD_STEPS = ["Product","Scan","Analyze","Verify","Report"];
+
+function newWizardState(){
+  return {
+    step: 1,
+    product: { name:"", brand:"", manufacturer:"", category:CATEGORIES[0], batch:"", inspector: state.user.name, location:"", datetime: new Date().toLocaleString("en-IN") },
+    images: [], // {slot, dataUrl}
+    processingPct: 0,
+    processingStepIdx: 0,
+    processingDone: false,
+    ocrFields: null,
+    checklist: null,
+    violations: null,
+    score: null,
+    verifications: {}, // violation index -> 'confirmed'|'rejected'|'manual'
+    remarks: "",
+    finalStatus: null,
+    finalized: false,
+    savedId: null,
+  };
+}
+
+const IMAGE_SLOTS = [
+  {key:"front", label:"Front"}, {key:"back", label:"Back"}, {key:"left", label:"Left Side"},
+  {key:"right", label:"Right Side"}, {key:"top", label:"Top"}, {key:"bottom", label:"Bottom"},
+];
+
+const PROCESSING_STEPS = [
+  "Uploading images", "Image preprocessing", "Detecting packaging regions", "Running OCR",
+  "Extracting declarations", "Identifying mandatory fields", "Running compliance rules",
+  "Generating findings", "Preparing report",
+];
+
+function renderStepper(current){
+  return `<div class="sm-steps">
+    ${WIZARD_STEPS.map((label,idx)=>{
+      const n = idx+1;
+      const cls = n<current?'done':n===current?'active':'';
+      return `<div class="sm-step ${cls}"><div class="sm-step-num">${n<current?'✓':n}</div><div class="sm-step-label">${label}</div></div>${idx<WIZARD_STEPS.length-1?'<div class="sm-step-line"></div>':''}`;
+    }).join("")}
+  </div>`;
+}
+
+function renderNewInspection(){
+  const w = state.newInspection;
+  if(!w) state.newInspection = newWizardState();
+  const wi = state.newInspection;
+
+  let body = "";
+  if(wi.step===1) body = renderWizardStep1(wi);
+  else if(wi.step===2) body = renderWizardStep2(wi);
+  else if(wi.step===3) body = renderWizardStep3(wi);
+  else if(wi.step===4) body = renderWizardStep4(wi);
+  else if(wi.step===5) body = renderWizardStep5(wi);
+
+  return `<div class="sm-content">${renderStepper(wi.step)}${body}</div>`;
+}
+
+function renderWizardStep1(wi){
+  const p = wi.product;
+  return `
+  <div class="sm-panel">
+    <div class="sm-panel-title">Step 1 — Product Information</div>
+    <div class="sm-form-grid">
+      <div class="sm-field"><label>Product name</label><input id="f-name" value="${esc(p.name)}" placeholder="e.g. Golden Crunch Biscuits" /></div>
+      <div class="sm-field"><label>Brand</label><input id="f-brand" value="${esc(p.brand)}" placeholder="e.g. ABC Foods" /></div>
+      <div class="sm-field"><label>Manufacturer</label><input id="f-mfr" value="${esc(p.manufacturer)}" placeholder="e.g. ABC Foods Pvt. Ltd." /></div>
+      <div class="sm-field"><label>Product category</label>
+        <select id="f-cat">${CATEGORIES.map(c=>`<option ${p.category===c?'selected':''}>${c}</option>`).join("")}</select>
+      </div>
+      <div class="sm-field"><label>Batch / Lot number</label><input id="f-batch" value="${esc(p.batch)}" placeholder="e.g. B4521-2026" /></div>
+      <div class="sm-field"><label>Inspector</label><input value="${esc(p.inspector)}" disabled /></div>
+      <div class="sm-field"><label>Inspection location</label><input id="f-loc" value="${esc(p.location)}" placeholder="e.g. Vijay Nagar Retail Hub" /></div>
+      <div class="sm-field"><label>Date / time</label><input value="${esc(p.datetime)}" disabled /></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:6px;">
+      <button class="sm-btn dark" id="wiz-next-1">Continue to Scan →</button>
+    </div>
+  </div>`;
+}
+
+function renderWizardStep2(wi){
+  return `
+  <div class="sm-panel">
+    <div class="sm-panel-title">Step 2 — Product Scanning</div>
+    <div class="sm-note blue">Align the product label inside the frame. Upload clear images of each side that carries printed declarations.</div>
+    <div class="sm-upload-grid">
+      ${IMAGE_SLOTS.map(s=>{
+        const img = wi.images.find(i=>i.slot===s.key);
+        return `<div class="sm-upload-slot" data-slot="${s.key}">
+          ${img ? `<img src="${img.dataUrl}" /><div class="cap"><span>${s.label}</span><button data-remove-slot="${s.key}">Remove</button></div>`
+          : `<span class="sm-upload-icon">📷</span><span>${s.label}<br/><span style="font-size:10.5px;">Tap to upload</span></span><input type="file" accept="image/*" data-upload-slot="${s.key}" />`}
+        </div>`;
+      }).join("")}
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-top:18px;">
+      <button class="sm-btn ghost" id="wiz-back-2">← Back</button>
+      <button class="sm-btn dark" id="wiz-analyze" ${wi.images.length===0?'disabled':''}>Analyze Product →</button>
+    </div>
+    ${wi.images.length===0 ? '<div style="font-size:11.5px;color:var(--slate-500);margin-top:8px;">Upload at least one image (front and back recommended) to continue.</div>':''}
+  </div>`;
+}
+
+function renderWizardStep3(wi){
+  if(!wi.processingDone){
+    const pct = wi.processingPct;
+    return `<div class="sm-processing">
+      <h2 style="font-size:19px;">Analyzing package…</h2>
+      <div class="sm-proc-bar-track"><div class="sm-proc-bar-fill" style="width:${pct}%;"></div></div>
+      <div style="font-size:13px; color:var(--slate-500); font-weight:600;">${pct}%</div>
+      <div class="sm-proc-list">
+        ${PROCESSING_STEPS.map((s,idx)=>`
+          <div class="sm-proc-item ${idx<wi.processingStepIdx?'done':idx===wi.processingStepIdx?'current':''}">
+            <span class="sm-proc-check">${idx<wi.processingStepIdx?'✓':idx===wi.processingStepIdx?'…':'○'}</span>${s}
+          </div>`).join("")}
+      </div>
+    </div>`;
+  }
+  return renderOcrResults(wi);
+}
+
+function generateMockAnalysis(wi){
+  // Deterministic-ish mock AI/OCR output derived from entered product info.
+  const cat = wi.product.category;
+  const hasFront = wi.images.some(i=>i.slot==="front");
+  const hasBack = wi.images.some(i=>i.slot==="back");
+  const r = Math.random;
+  const fields = [
+    {key:"name", label:"Product Name", value: wi.product.name || "Golden Crunch Biscuits", conf: randInt(96,99), loc: hasFront?"Front image":"Back image", status:"Detected"},
+    {key:"manufacturer", label:"Manufacturer", value: wi.product.manufacturer || "ABC Foods Pvt. Ltd.", conf: randInt(92,98), loc: hasBack?"Back image":"Front image", status:"Detected"},
+    {key:"address", label:"Address", value: pick(["Indore, Madhya Pradesh, India","New Delhi, India","Ahmedabad, Gujarat, India"]), conf: randInt(85,96), loc:"Back image", status:"Detected"},
+    {key:"netqty", label:"Net Quantity", value: pick(["500 g","250 g","1 kg","200 ml"]), conf: randInt(94,99), loc:"Front image", status:"Detected"},
+    {key:"mrp", label:"MRP", value: `₹${randInt(45,320)} (incl. of all taxes)`, conf: randInt(75,97), loc:"Front image", status: r()<0.15 ? "Low confidence":"Detected"},
+    {key:"date", label:"Date of Manufacture", value: `MFD: ${randInt(1,9).toString().padStart(2,"0")}/2026`, conf: randInt(90,98), loc:"Back image", status:"Detected"},
+    {key:"care", label:"Consumer Care", value: r()<0.25 ? "Not detected" : `1800-${randInt(100,999)}-${randInt(1000,9999)}`, conf: r()<0.25?randInt(60,79):randInt(88,97), loc:"Back image", status: r()<0.25?"Not Detected":"Detected"},
+  ];
+
+  const checklist = fields.map(f=>{
+    const detected = f.status !== "Not Detected";
+    const passThresh = f.conf >= 88;
+    return {
+      label: f.label==="Product Name"?"Product name":f.label==="Manufacturer"?"Manufacturer":f.label==="Address"?"Address":
+             f.label==="Net Quantity"?"Net quantity":f.label==="MRP"?"MRP":f.label==="Date of Manufacture"?"Date":"Consumer care",
+      detected, conf: f.conf, status: (detected && passThresh) ? "PASS" : "REVIEW",
+    };
+  });
+
+  const violations = [];
+  checklist.forEach((c,idx)=>{
+    if(c.status==="REVIEW"){
+      const map = {
+        "MRP":VIOLATION_TYPES[0], "Net quantity":VIOLATION_TYPES[1], "Address":VIOLATION_TYPES[2],
+        "Date":VIOLATION_TYPES[3], "Consumer care":VIOLATION_TYPES[4],
+      };
+      const v = map[c.label];
+      if(v) violations.push({...v, confidence: c.conf, severity: c.conf<80?"High":"Medium", evidence: v.field==="Consumer Care"||v.field==="Manufacturer Address"?"Back-side image":"Front-side image"});
+    }
+  });
+  // Readability check
+  const readabilityGood = r() < 0.8;
+  if(!readabilityGood){
+    violations.push({field:"Font Size", cat:"Readability Issue", rule:"LM-PC-07", desc:"Estimated character height appears below the expected threshold for this package area.", confidence: randInt(70,86), severity:"Medium", evidence:"Front-side image"});
+  }
+
+  const passCount = checklist.filter(c=>c.status==="PASS").length;
+  const totalCount = checklist.length;
+  let score = Math.round((passCount/totalCount)*100) - (violations.length>totalCount-passCount ? 5:0);
+  score = Math.max(40, Math.min(99, score - randInt(0,3)));
+  const finalStatus = violations.length===0 ? "compliant" : (score<70 ? "violation" : "review");
+
+  return { fields, checklist, violations, score, readabilityGood, finalStatus };
+}
+
+function renderOcrResults(wi){
+  const a = wi.analysis;
+  const heroImg = wi.images[0];
+  return `
+  <div class="sm-panel">
+    <div class="sm-panel-title">Step 3 — OCR &amp; Declaration Extraction</div>
+    <div class="sm-review-split">
+      <div>
+        <div class="sm-image-viewer">
+          ${heroImg? `<img src="${heroImg.dataUrl}" />` : `<div style="height:260px;display:flex;align-items:center;justify-content:center;color:#8393ab;">No image</div>`}
+        </div>
+        <div class="sm-legend">
+          <span><i style="background:var(--green);"></i>Valid declaration</span>
+          <span><i style="background:var(--amber);"></i>Review</span>
+          <span><i style="background:var(--red);"></i>Potential violation</span>
+        </div>
+      </div>
+      <div>
+        ${a.fields.map(f=>`
+          <div class="sm-field-row">
+            <div><div class="sm-field-name">${f.label.toUpperCase()}</div><div class="sm-field-val">${esc(f.value)}</div></div>
+            <div class="sm-field-meta">Confidence: <span class="sm-conf ${confClass(f.conf)}">${f.conf}%</span><br/>${f.loc}<br/>${f.status==="Detected"?"✓ Detected":f.status==="Not Detected"?"✗ Not Detected":"⚠ Low confidence"}</div>
+          </div>`).join("")}
+      </div>
+    </div>
+    <div class="sm-note">These are AI-detected values from OCR/NLP extraction. All fields require officer verification before a final determination is made.</div>
+    <div style="display:flex; justify-content:space-between;">
+      <button class="sm-btn ghost" id="wiz-back-3">← Back to Scan</button>
+      <button class="sm-btn dark" id="wiz-to-checklist">Continue to Declaration Checklist →</button>
+    </div>
+  </div>`;
+}
+
+function renderWizardStep4(wi){
+  const a = wi.analysis;
+  const sub = wi.substep4 || "checklist"; // checklist -> violations -> score -> officer-review
+  if(sub==="checklist") return renderChecklistPanel(wi,a);
+  if(sub==="violations") return renderViolationsPanel(wi,a);
+  if(sub==="score") return renderScorePanel(wi,a);
+  return renderOfficerReviewPanel(wi,a);
+}
+
+function renderChecklistPanel(wi,a){
+  return `
+  <div class="sm-panel">
+    <div class="sm-panel-title">Declaration Checklist</div>
+    <div class="sm-check-row head"><div>Declaration</div><div>Detected</div><div>Confidence</div><div>Status</div></div>
+    ${a.checklist.map(c=>`
+      <div class="sm-check-row">
+        <div>${c.label}</div>
+        <div>${c.detected?'Yes':'No'}</div>
+        <div class="sm-conf ${confClass(c.conf)}">${c.conf}%</div>
+        <div>${c.status==="PASS"?statusBadge("compliant"):statusBadge("review")}</div>
+      </div>`).join("")}
+    <div class="sm-note">Requirements shown are drawn from the configured Rule Library for category: <b>${esc(wi.product.category)}</b>. Not every declaration is mandatory for every product category.</div>
+    <div style="display:flex; justify-content:space-between;">
+      <button class="sm-btn ghost" id="wiz-back-checklist">← Back to OCR Results</button>
+      <button class="sm-btn dark" id="wiz-to-violations">Continue →</button>
+    </div>
+  </div>`;
+}
+
+function renderViolationsPanel(wi,a){
+  if(a.violations.length===0){
+    return `<div class="sm-panel">
+      <div class="sm-panel-title">Violation Details</div>
+      <div class="sm-empty"><div class="big">✅</div>No potential violations were flagged by the rule engine for this inspection.</div>
+      <div style="display:flex; justify-content:space-between;">
+        <button class="sm-btn ghost" id="wiz-back-viol">← Back</button>
+        <button class="sm-btn dark" id="wiz-to-score">Continue to Compliance Score →</button>
+      </div>
+    </div>`;
+  }
+  return `
+  <div class="sm-panel">
+    <div class="sm-panel-title">Violation Details</div>
+    ${a.violations.map((v,idx)=>`
+      <div class="sm-viol-card ${v.severity==='Medium'?'medium':''}">
+        <div class="sm-viol-head">
+          <div>
+            <div style="font-size:11px; color:var(--slate-500); font-weight:700;">POTENTIAL VIOLATION #${(idx+1).toString().padStart(2,'0')}</div>
+            <div class="sm-viol-title">${esc(v.cat)}</div>
+          </div>
+          ${v.severity==='High'?statusBadge('violation'):statusBadge('review')}
+        </div>
+        <div class="sm-viol-grid">
+          <div><span>Field</span>${esc(v.field)}</div>
+          <div><span>AI Confidence</span>${v.confidence}%</div>
+          <div><span>Evidence</span>${esc(v.evidence||'Package image')}</div>
+          <div><span>Rule</span><span class="sm-rule-id">${v.rule}</span></div>
+        </div>
+        <div style="font-size:12.5px; color:var(--slate-500); margin-bottom:10px;">${esc(v.desc)} · Severity: <b>${v.severity}</b> · Verification: <i>Pending Officer Review</i></div>
+        <div class="sm-viol-actions">
+          <button class="sm-btn sm ${wi.verifications[idx]==='confirmed'?'sel':''}" data-verify="${idx}" data-action="confirmed">Confirm Finding</button>
+          <button class="sm-btn sm ${wi.verifications[idx]==='rejected'?'sel':''}" data-verify="${idx}" data-action="rejected">Reject Finding</button>
+          <button class="sm-btn sm ${wi.verifications[idx]==='manual'?'sel':''}" data-verify="${idx}" data-action="manual">Requires Manual Verification</button>
+        </div>
+      </div>`).join("")}
+    <div style="display:flex; justify-content:space-between;">
+      <button class="sm-btn ghost" id="wiz-back-viol">← Back to Checklist</button>
+      <button class="sm-btn dark" id="wiz-to-score">Continue to Compliance Score →</button>
+    </div>
+  </div>`;
+}
+
+function renderScorePanel(wi,a){
+  const color = a.score>=85?"var(--green)":a.score>=70?"var(--amber)":"var(--red)";
+  const label = a.score>=85?"Compliant":a.score>=70?"Requires Review":"Potential Non-Compliance";
+  const passCount = a.checklist.filter(c=>c.status==="PASS").length;
+  return `
+  <div class="sm-panel">
+    <div class="sm-panel-title">AI-Assisted Compliance Assessment</div>
+    <div class="sm-score-hero">
+      <div class="sm-score-circle" style="border-color:${color};">
+        <div class="sm-score-num" style="color:${color};">${a.score}%</div>
+        <div class="sm-score-sub">SCORE</div>
+      </div>
+      <div>
+        <div style="font-size:17px; font-weight:700; color:${color};">${label}</div>
+        <div style="font-size:12.5px; color:var(--slate-500); margin-top:4px; max-width:360px;">This is an AI-assisted compliance assessment based on OCR extraction and configured rules — not a final legal determination.</div>
+      </div>
+    </div>
+    <div class="sm-form-grid" style="margin-top:6px;">
+      <div class="sm-field-row"><div class="sm-field-name">MANDATORY DECLARATIONS</div><div class="sm-field-val">${passCount} / ${a.checklist.length}</div></div>
+      <div class="sm-field-row"><div class="sm-field-name">READABILITY</div><div class="sm-field-val">${a.readabilityGood?"PASS":"REVIEW"}</div></div>
+      <div class="sm-field-row"><div class="sm-field-name">MRP</div><div class="sm-field-val">${a.checklist.find(c=>c.label==="MRP").status}</div></div>
+      <div class="sm-field-row"><div class="sm-field-name">NET QUANTITY</div><div class="sm-field-val">${a.checklist.find(c=>c.label==="Net quantity").status}</div></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-top:12px;">
+      <button class="sm-btn ghost" id="wiz-back-score">← Back to Violations</button>
+      <button class="sm-btn dark" id="wiz-to-officer">Continue to Officer Review →</button>
+    </div>
+  </div>`;
+}
+
+function renderOfficerReviewPanel(wi,a){
+  return `
+  <div class="sm-panel">
+    <div class="sm-panel-title">Officer Review</div>
+    <div class="sm-form-grid">
+      <div>
+        <div class="sm-field-name" style="margin-bottom:6px;">FINDINGS SUMMARY</div>
+        ${a.violations.length===0 ? '<div style="font-size:13px;color:var(--slate-500);">No findings raised.</div>' :
+          a.violations.map((v,idx)=>`<div style="font-size:12.5px; padding:6px 0; border-bottom:1px solid var(--slate-100);">${esc(v.cat)} — <b>${wi.verifications[idx] ? wi.verifications[idx].toUpperCase() : 'PENDING'}</b></div>`).join("")}
+      </div>
+      <div>
+        <div class="sm-field"><label>Officer remarks</label><textarea id="f-remarks" rows="5" style="width:100%; padding:10px; border:1px solid #d8dde5; border-radius:4px; font-size:13px;" placeholder="Add observations, additional evidence notes, or context...">${esc(wi.remarks)}</textarea></div>
+        <div class="sm-note blue">Additional photographs and supporting documents can be attached from the Scan step if required.</div>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-top:6px;">
+      <button class="sm-btn ghost" id="wiz-back-officer">← Back to Score</button>
+      <button class="sm-btn gold" id="wiz-finalize">Finalize Inspection ✓</button>
+    </div>
+  </div>`;
+}
+
+function renderWizardStep5(wi){
+  const a = wi.analysis;
+  const color = a.finalStatus==="compliant"?"var(--green)":a.finalStatus==="violation"?"var(--red)":"var(--amber)";
+  const label = a.finalStatus==="compliant"?"COMPLIANT":a.finalStatus==="violation"?"POTENTIAL NON-COMPLIANCE":"REQUIRES REVIEW";
+  return `
+  <div class="sm-report-page">
+    <div class="sm-report-header">
+      <div>
+        <div style="font-family:var(--serif); font-size:19px;">SMARTMETROLOGY AI</div>
+        <div style="font-size:12px; color:var(--slate-500);">Legal Metrology Compliance Inspection Report</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:11px; color:var(--slate-500);">Inspection ID</div>
+        <div style="font-weight:700;">${wi.savedId}</div>
+      </div>
+    </div>
+    <div class="sm-report-sec">
+      <h3>Inspection Details</h3>
+      <div class="sm-report-grid">
+        <div><span>Officer</span>${esc(wi.product.inspector)}</div>
+        <div><span>Date / Time</span>${esc(wi.product.datetime)}</div>
+        <div><span>Location</span>${esc(wi.product.location||'—')}</div>
+        <div><span>Batch / Lot</span>${esc(wi.product.batch||'—')}</div>
+      </div>
+    </div>
+    <div class="sm-report-sec">
+      <h3>Product Details</h3>
+      <div class="sm-report-grid">
+        <div><span>Product Name</span>${esc(wi.product.name)}</div>
+        <div><span>Brand</span>${esc(wi.product.brand||'—')}</div>
+        <div><span>Manufacturer</span>${esc(wi.product.manufacturer)}</div>
+        <div><span>Category</span>${esc(wi.product.category)}</div>
+      </div>
+    </div>
+    <div class="sm-report-sec">
+      <h3>Declaration Analysis</h3>
+      <div class="sm-check-row head"><div>Declaration</div><div>Detected</div><div>Confidence</div><div>Status</div></div>
+      ${a.checklist.map(c=>`<div class="sm-check-row"><div>${c.label}</div><div>${c.detected?'Yes':'No'}</div><div>${c.conf}%</div><div>${c.status}</div></div>`).join("")}
+    </div>
+    <div class="sm-report-sec">
+      <h3>Findings</h3>
+      ${a.violations.length===0? '<div style="font-size:13px;">No potential violations identified.</div>' :
+        a.violations.map((v,idx)=>`<div style="font-size:13px; margin-bottom:8px;"><b>${esc(v.cat)}</b> — ${esc(v.desc)} (Rule ${v.rule}, Confidence ${v.confidence}%, Verification: ${wi.verifications[idx]?wi.verifications[idx]:'pending'})</div>`).join("")}
+    </div>
+    <div class="sm-report-sec">
+      <h3>Officer Verification</h3>
+      <div style="font-size:13px; margin-bottom:6px;">${wi.remarks ? esc(wi.remarks) : 'No additional remarks recorded.'}</div>
+      <div style="font-size:12px; color:var(--slate-500);">Verified by ${esc(wi.product.inspector)} on ${esc(wi.product.datetime)}</div>
+    </div>
+    <div class="sm-report-sec">
+      <h3>Final Status</h3>
+      <div style="font-size:20px; font-weight:700; color:${color};">${label}</div>
+    </div>
+    <div class="sm-disclaimer">This report is an AI-assisted inspection aid. Final legal determination is subject to verification by the competent authority under applicable law.</div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="sm-btn dark" onclick="window.print()">Generate PDF / Print</button>
+      <button class="sm-btn" id="wiz-download-json">Download Editable Report (JSON)</button>
+      <button class="sm-btn" data-nav="inspections">View in Inspection History</button>
+    </div>
+  </div>`;
+}
+
+/* ---- Inspections list & detail ---- */
+
+function renderInspectionsList(){
+  const insp = allInspections();
+  return `<div class="sm-content">
+    <div class="sm-search-bar">
+      <input id="insp-search" placeholder="Search by product, brand, manufacturer, inspection ID, officer..." />
+      <select id="insp-filter-status"><option value="">All statuses</option><option value="compliant">Compliant</option><option value="review">Requires Review</option><option value="violation">Potential Violation</option></select>
+      <select id="insp-filter-cat"><option value="">All categories</option>${CATEGORIES.map(c=>`<option>${c}</option>`).join("")}</select>
+    </div>
+    <div class="sm-panel" id="insp-table-wrap">${renderInspectionRows(insp)}</div>
+  </div>`;
+}
+
+function renderInspectionRows(list){
+  if(list.length===0) return `<div class="sm-empty"><div class="big">🔍</div>No inspections match your search.</div>`;
+  return `<table class="sm-table">
+    <thead><tr><th>Inspection ID</th><th>Product</th><th>Officer</th><th>Date</th><th>Score</th><th>Status</th><th>Violations</th><th></th></tr></thead>
+    <tbody>
+      ${list.map(i=>`<tr>
+        <td class="sm-rule-id">${i.id}</td>
+        <td>${i.icon||'📦'} ${esc(i.product)}</td>
+        <td>${esc(i.inspector)}</td>
+        <td>${i.date}</td>
+        <td>${i.score}%</td>
+        <td>${statusBadge(i.status)}</td>
+        <td>${i.violations.length}</td>
+        <td><span class="sm-table-link" data-view-inspection="${i.id}">View</span></td>
+      </tr>`).join("")}
+    </tbody>
+  </table>`;
+}
+
+function renderInspectionDetail(id){
+  const i = allInspections().find(x=>x.id===id);
+  if(!i) return `<div class="sm-content"><div class="sm-empty">Inspection not found.</div></div>`;
+  const color = i.status==="compliant"?"var(--green)":i.status==="violation"?"var(--red)":"var(--amber)";
+  return `<div class="sm-content">
+    <button class="sm-btn ghost" data-nav="inspections" style="margin-bottom:14px;">← Back to Inspections</button>
+    <div class="sm-panel">
+      <div class="sm-panel-title">${i.icon||'📦'} ${esc(i.product)} <span style="font-weight:400;">— ${statusBadge(i.status)}</span></div>
+      <div class="sm-report-grid" style="margin-bottom:16px;">
+        <div><span>Inspection ID</span>${i.id}</div>
+        <div><span>Score</span><b style="color:${color};">${i.score}%</b></div>
+        <div><span>Brand</span>${esc(i.brand)}</div>
+        <div><span>Manufacturer</span>${esc(i.manufacturer)}</div>
+        <div><span>Category</span>${esc(i.category)}</div>
+        <div><span>Batch/Lot</span>${i.batch}</div>
+        <div><span>Officer</span>${esc(i.inspector)} (${i.inspectorId})</div>
+        <div><span>Date</span>${i.date}</div>
+        <div><span>Location</span>${esc(i.location)}</div>
+      </div>
+      <h3 style="font-size:13px; text-transform:uppercase; color:var(--slate-500); border-bottom:1px solid var(--slate-100); padding-bottom:6px; margin-bottom:10px;">Findings</h3>
+      ${i.violations.length===0 ? '<div style="font-size:13px; color:var(--slate-500);">No potential violations identified during this inspection.</div>' :
+        i.violations.map(v=>`<div class="sm-viol-card ${v.severity==='Medium'?'medium':''}">
+          <div class="sm-viol-head"><div class="sm-viol-title">${esc(v.cat)}</div>${v.severity==='High'?statusBadge('violation'):statusBadge('review')}</div>
+          <div style="font-size:12.5px; color:var(--slate-500);">${esc(v.desc)} · Field: ${esc(v.field)} · Rule ${v.rule} · Confidence ${v.confidence}% · Severity ${v.severity}</div>
+        </div>`).join("")}
+      <div class="sm-disclaimer">This inspection record reflects an AI-assisted assessment. Final legal determination is subject to verification by the competent authority under applicable law.</div>
+    </div>
+  </div>`;
+}
+
+/* ---- Products ---- */
+
+function renderProducts(){
+  return `<div class="sm-content">
+    ${PRODUCT_NAMES.map((p,idx)=>{
+      const related = allInspections().filter(i=>i.product===p.name);
+      const latest = related[0];
+      return `<div class="sm-product-card" data-view-product="${idx}">
+        <div class="sm-product-thumb">${p.icon}</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;">${esc(p.name)}</div>
+          <div style="font-size:12px; color:var(--slate-500);">${esc(p.brand)} · ${esc(p.mfr)}</div>
+          <div style="margin-top:4px;"><span class="sm-tag-cat">${p.cat}</span></div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px; color:var(--slate-500);">${related.length} inspection${related.length!==1?'s':''}</div>
+          ${latest ? statusBadge(latest.status) : ''}
+        </div>
+      </div>`;
+    }).join("")}
+  </div>`;
+}
+
+function renderProductDetail(idx){
+  const p = PRODUCT_NAMES[idx];
+  const related = allInspections().filter(i=>i.product===p.name);
+  return `<div class="sm-content">
+    <button class="sm-btn ghost" data-nav="products" style="margin-bottom:14px;">← Back to Products</button>
+    <div class="sm-panel">
+      <div style="display:flex; gap:16px; align-items:center; margin-bottom:16px;">
+        <div class="sm-product-thumb" style="width:64px;height:64px;font-size:26px;">${p.icon}</div>
+        <div>
+          <h2 style="font-size:19px;">${esc(p.name)}</h2>
+          <div style="font-size:12.5px; color:var(--slate-500);">${esc(p.brand)} · ${esc(p.mfr)} · <span class="sm-tag-cat">${p.cat}</span></div>
+        </div>
+      </div>
+      <h3 style="font-size:13px; text-transform:uppercase; color:var(--slate-500); border-bottom:1px solid var(--slate-100); padding-bottom:6px; margin-bottom:14px;">Compliance History</h3>
+      ${related.length===0 ? '<div style="color:var(--slate-500); font-size:13px;">No inspections recorded for this product yet.</div>' : `
+      <div class="sm-timeline">
+        ${related.map(i=>`<div class="sm-timeline-item">
+          <div class="sm-timeline-date">${i.date}</div>
+          <div class="sm-timeline-desc">Inspection ${i.id} completed — ${statusBadge(i.status)} <span class="sm-table-link" data-view-inspection="${i.id}" style="margin-left:8px;">View report</span></div>
+        </div>`).join("")}
+      </div>`}
+    </div>
+  </div>`;
+}
+
+/* ---- Violations list ---- */
+
+function renderViolationsList(){
+  const insp = allInspections().filter(i=>i.violations.length>0);
+  return `<div class="sm-content">
+    ${insp.length===0? '<div class="sm-empty">No violations recorded.</div>' :
+      insp.map(i=> i.violations.map(v=>`
+        <div class="sm-viol-card ${v.severity==='Medium'?'medium':''}">
+          <div class="sm-viol-head">
+            <div>
+              <div style="font-size:11px; color:var(--slate-500); font-weight:700;">${i.id} · ${esc(i.product)}</div>
+              <div class="sm-viol-title">${esc(v.cat)}</div>
+            </div>
+            ${v.severity==='High'?statusBadge('violation'):statusBadge('review')}
+          </div>
+          <div style="font-size:12.5px; color:var(--slate-500); margin-bottom:8px;">${esc(v.desc)} · Field: ${esc(v.field)} · Rule ${v.rule} · Confidence ${v.confidence}%</div>
+          <span class="sm-table-link" data-view-inspection="${i.id}">View full inspection →</span>
+        </div>`).join("")).join("")}
+  </div>`;
+}
+
+/* ---- Reports ---- */
+
+function renderReports(){
+  const insp = allInspections();
+  return `<div class="sm-content">
+    <div class="sm-panel">
+      <div class="sm-panel-title">Generated Reports</div>
+      <table class="sm-table">
+        <thead><tr><th>Inspection ID</th><th>Product</th><th>Date</th><th>Final Status</th><th></th></tr></thead>
+        <tbody>
+          ${insp.map(i=>`<tr>
+            <td class="sm-rule-id">${i.id}</td><td>${esc(i.product)}</td><td>${i.date}</td><td>${statusBadge(i.status)}</td>
+            <td><span class="sm-table-link" data-view-inspection="${i.id}">Open report</span></td>
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+/* ---- Analytics ---- */
+
+function renderAnalytics(){
+  const insp = allInspections();
+  const byCat = {};
+  CATEGORIES.forEach(c=> byCat[c] = insp.filter(i=>i.category===c).length);
+  const maxCat = Math.max(1,...Object.values(byCat));
+
+  const months = ["Apr","May","Jun","Jul","Aug","Sep"];
+  const trend = months.map((m,idx)=> 58 + idx*2 + randInt(-3,4));
+
+  const violCounts = {};
+  insp.forEach(i=> i.violations.forEach(v=>{ violCounts[v.cat] = (violCounts[v.cat]||0)+1; }));
+  const violEntries = Object.entries(violCounts).sort((a,b)=>b[1]-a[1]);
+  const maxV = Math.max(1,...violEntries.map(e=>e[1]));
+
+  return `<div class="sm-content">
+    <div class="sm-row-2">
+      <div class="sm-panel">
+        <div class="sm-panel-title">Compliance Trend (Monthly %)</div>
+        <div style="display:flex; align-items:flex-end; gap:14px; height:140px;">
+          ${trend.map((v,idx)=>`<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;">
+            <div style="font-size:11px; margin-bottom:4px;">${v}%</div>
+            <div style="width:70%; background:var(--navy-700); border-radius:4px 4px 0 0; height:${v}px;"></div>
+            <div style="font-size:11px; color:var(--slate-500); margin-top:6px;">${months[idx]}</div>
+          </div>`).join("")}
+        </div>
+      </div>
+      <div class="sm-panel">
+        <div class="sm-panel-title">Top Violations</div>
+        ${violEntries.length===0? '<div style="color:var(--slate-500);font-size:13px;">No data.</div>' : violEntries.map(([label,val])=>`
+          <div style="margin-bottom:9px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>${label}</span><b>${val}</b></div>
+            <div style="background:var(--slate-100); height:7px; border-radius:20px;"><div style="background:var(--red); width:${(val/maxV)*100}%; height:100%; border-radius:20px;"></div></div>
+          </div>`).join("")}
+      </div>
+    </div>
+    <div class="sm-row-2">
+      <div class="sm-panel">
+        <div class="sm-panel-title">Product Categories Inspected</div>
+        ${CATEGORIES.map(c=>`<div style="margin-bottom:9px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>${c}</span><b>${byCat[c]}</b></div>
+          <div style="background:var(--slate-100); height:7px; border-radius:20px;"><div style="background:var(--gold); width:${(byCat[c]/maxCat)*100}%; height:100%; border-radius:20px;"></div></div>
+        </div>`).join("")}
+      </div>
+      <div class="sm-panel">
+        <div class="sm-panel-title">Manufacturer Trends</div>
+        <table class="sm-table">
+          <thead><tr><th>Manufacturer</th><th>Inspections</th><th>Recurring finding</th></tr></thead>
+          <tbody>
+            ${[...new Set(insp.map(i=>i.manufacturer))].slice(0,6).map(m=>{
+              const items = insp.filter(i=>i.manufacturer===m);
+              const vCats = items.flatMap(i=>i.violations.map(v=>v.cat));
+              const top = vCats.length ? vCats.sort((a,b)=>vCats.filter(x=>x===b).length - vCats.filter(x=>x===a).length)[0] : "—";
+              return `<tr><td>${esc(m)}</td><td>${items.length}</td><td>${esc(top)}</td></tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sm-panel">
+      <div class="sm-panel-title">Geographic Distribution</div>
+      ${(()=>{ const locs={}; insp.forEach(i=>locs[i.location]=(locs[i.location]||0)+1);
+        const maxL = Math.max(1,...Object.values(locs));
+        return Object.entries(locs).map(([l,v])=>`<div style="margin-bottom:9px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>${esc(l)}</span><b>${v}</b></div>
+          <div style="background:var(--slate-100); height:7px; border-radius:20px;"><div style="background:var(--blue); width:${(v/maxL)*100}%; height:100%; border-radius:20px;"></div></div>
+        </div>`).join(""); })()}
+      <div style="font-size:11px; color:var(--slate-500); margin-top:6px;">Location shown at market/area level only — no individually identifying data displayed.</div>
+    </div>
+  </div>`;
+}
+
+/* ---- Rule Library ---- */
+
+function renderRules(){
+  return `<div class="sm-content">
+    <div class="sm-note">This list follows the rule numbering and terminology of the Legal Metrology (Packaged Commodities) Rules, 2011. Explanations are brief summaries for reference — verify the currently applicable amended rules and notifications before enforcement use.</div>
+    <div class="sm-panel">
+      <div class="sm-panel-title">Legal Metrology (Packaged Commodities) Rules, 2011 — Rules</div>
+      ${RULES.map(r=>`<div class="sm-rule-row sm-table-link" data-rule-modal="${esc(r.id)}">
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <div><span class="sm-rule-id">${esc(r.id)}</span> · ${esc(r.title)}</div>
+          <span style="color:var(--slate-400);">›</span>
+        </div>
+      </div>`).join("")}
+    </div>
+    <div class="sm-panel">
+      <div class="sm-panel-title">Schedules</div>
+      ${SCHEDULES.map(s=>`<div class="sm-rule-row sm-table-link" data-rule-modal="${esc(s.id)}">
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <div><span class="sm-rule-id">${esc(s.id)}</span> · ${esc(s.title)}</div>
+          <span style="color:var(--slate-400);">›</span>
+        </div>
+      </div>`).join("")}
+    </div>
+  </div>
+  ${renderRuleModal()}`;
+}
+
+function renderRuleModal(){
+  if(!state.ruleModalId) return "";
+  const item = RULES.find(r=>r.id===state.ruleModalId) || SCHEDULES.find(s=>s.id===state.ruleModalId);
+  if(!item) return "";
+  return `<div class="sm-modal-bg" id="sm-rule-modal-bg">
+    <div class="sm-modal">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+        <div>
+          <div class="sm-rule-id" style="margin-bottom:4px;">${esc(item.id)}</div>
+          <h3 style="font-size:17px;">${esc(item.title)}</h3>
+        </div>
+        <button class="sm-btn sm ghost" id="sm-rule-modal-close">✕</button>
+      </div>
+      <div style="font-size:14px; line-height:1.6; color:var(--navy-900);">${esc(item.desc)}</div>
+      <div style="font-size:11.5px; color:var(--slate-500); margin-top:16px; padding-top:12px; border-top:1px solid var(--slate-100);">This is a brief reference summary, not the full legal text. Confirm exact wording against the official Rules before relying on it for compliance decisions.</div>
+    </div>
+  </div>`;
+}
+
+/* ---- Users ---- */
+
+function renderUsers(){
+  const roleLabel = {inspector:"Inspector", senior:"Senior Officer"};
+  return `<div class="sm-content">
+    <div class="sm-panel">
+      <div class="sm-panel-title">Officer Accounts <button class="sm-btn sm dark">+ Add User</button></div>
+      <table class="sm-table">
+        <thead><tr><th>Officer ID</th><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+        <tbody>
+          ${OFFICERS.map(o=>`<tr><td class="sm-rule-id">${o.id}</td><td>${esc(o.name)}</td><td>${roleLabel[o.role]}</td><td>${statusBadge('compliant')}</td></tr>`).join("")}
+          <tr><td class="sm-rule-id">ADM-001</td><td>System Administrator</td><td>Administrator</td><td>${statusBadge('compliant')}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+/* ---- Settings ---- */
+
+function renderSettings(){
+  return `<div class="sm-content">
+    <div class="sm-panel">
+      <div class="sm-panel-title">Account</div>
+      <div class="sm-form-grid">
+        <div class="sm-field"><label>Name</label><input value="${esc(state.user.name)}" disabled /></div>
+        <div class="sm-field"><label>Officer ID</label><input value="${esc(state.user.id)}" disabled /></div>
+      </div>
+    </div>
+    <div class="sm-panel">
+      <div class="sm-panel-title">Offline &amp; Sync</div>
+      <div style="font-size:13px; margin-bottom:10px;">${state.pendingSync} inspection${state.pendingSync!==1?'s':''} pending synchronization.</div>
+      <button class="sm-btn dark" id="sm-sync-btn-2">Sync Now</button>
+    </div>
+    <div class="sm-panel">
+      <div class="sm-panel-title">System Notice</div>
+      <div style="font-size:12.5px; color:var(--slate-500);">This is a demonstration build. OCR, computer vision, and rule evaluation are simulated by a mock AI service layer with an interface designed for real model integration (PaddleOCR/Tesseract, CV pipelines, and a deterministic rule engine).</div>
+    </div>
+  </div>`;
+}
+
+/* ============================= MAIN RENDER ============================= */
+
+function renderContent(){
+  switch(state.view){
+    case "dashboard": return renderDashboard();
+    case "new-inspection": return renderNewInspection();
+    case "inspections": return renderInspectionsList();
+    case "inspection-detail": return renderInspectionDetail(state.detailInspectionId);
+    case "products": return state.detailProductIdx!==null ? renderProductDetail(state.detailProductIdx) : renderProducts();
+    case "violations": return renderViolationsList();
+    case "reports": return renderReports();
+    case "analytics": return renderAnalytics();
+    case "rules": return renderRules();
+    case "users": return renderUsers();
+    case "settings": return renderSettings();
+    default: return renderDashboard();
+  }
+}
+
+function render(){
+  const root = document.getElementById("sm-app-root");
+  if(!state.authed){
+    root.innerHTML = renderLogin();
+    bindLogin();
+    return;
+  }
+  root.innerHTML = `
+    <div class="sm-app">
+      ${renderSidebar()}
+      <div class="sm-main">
+        ${renderTopbar()}
+        ${renderContent()}
+      </div>
+    </div>
+    <div class="sm-toast-wrap">${state.toasts.map(t=>`<div class="sm-toast ${t.kind||''}">${t.msg}</div>`).join("")}</div>
+  `;
+  bindApp();
+}
+
+/* ============================= EVENT BINDING ============================= */
+
+function bindLogin(){
+  const form = document.getElementById("sm-login-form");
+  form.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    state.authed = true;
+    state.user = {name:"R. Sharma", id:"OFC-102"};
+    render();
+  });
+}
+
+function goto(view, extra){
+  state.view = view;
+  state.detailInspectionId = extra && extra.inspectionId !== undefined ? extra.inspectionId : null;
+  state.detailProductIdx = extra && extra.productIdx !== undefined ? extra.productIdx : null;
+  state.sidebarOpen = false;
+  render();
+}
+
+function bindApp(){
+  document.querySelectorAll("[data-nav]").forEach(el=>{
+    el.addEventListener("click", ()=> goto(el.getAttribute("data-nav")));
+  });
+  const menuToggle = document.getElementById("sm-menu-toggle");
+  if(menuToggle) menuToggle.addEventListener("click", ()=>{ state.sidebarOpen = !state.sidebarOpen; render(); });
+  const scrim = document.getElementById("sm-scrim");
+  if(scrim) scrim.addEventListener("click", ()=>{ state.sidebarOpen=false; render(); });
+  const logout = document.getElementById("sm-logout-btn");
+  if(logout) logout.addEventListener("click", ()=>{ state.authed=false; state.view="dashboard"; state.newInspection=null; render(); });
+
+  document.querySelectorAll("[data-view-inspection]").forEach(el=>{
+    el.addEventListener("click", ()=> goto("inspection-detail", {inspectionId: el.getAttribute("data-view-inspection")}));
+  });
+  document.querySelectorAll("[data-view-product]").forEach(el=>{
+    el.addEventListener("click", ()=> goto("products", {productIdx: parseInt(el.getAttribute("data-view-product"))}));
+  });
+
+  document.querySelectorAll("[data-rule-modal]").forEach(el=>{
+    el.addEventListener("click", ()=>{ state.ruleModalId = el.getAttribute("data-rule-modal"); render(); });
+  });
+  const ruleModalBg = document.getElementById("sm-rule-modal-bg");
+  if(ruleModalBg) ruleModalBg.addEventListener("click", (e)=>{ if(e.target.id==="sm-rule-modal-bg"){ state.ruleModalId=null; render(); } });
+  const ruleModalClose = document.getElementById("sm-rule-modal-close");
+  if(ruleModalClose) ruleModalClose.addEventListener("click", ()=>{ state.ruleModalId=null; render(); });
+
+  const syncBtn = document.getElementById("sm-sync-btn") || document.getElementById("sm-sync-btn-2");
+  if(syncBtn) syncBtn.addEventListener("click", ()=>{
+    state.pendingSync = 0; showToast("All inspections synchronized.","ok"); render();
+  });
+
+  if(state.view==="inspections"){
+    const search = document.getElementById("insp-search");
+    const fStatus = document.getElementById("insp-filter-status");
+    const fCat = document.getElementById("insp-filter-cat");
+    function applyFilter(){
+      const q = (search.value||"").toLowerCase();
+      const list = allInspections().filter(i=>{
+        const matchesQ = !q || [i.product,i.brand,i.manufacturer,i.id,i.inspector].join(" ").toLowerCase().includes(q);
+        const matchesStatus = !fStatus.value || i.status===fStatus.value;
+        const matchesCat = !fCat.value || i.category===fCat.value;
+        return matchesQ && matchesStatus && matchesCat;
+      });
+      document.getElementById("insp-table-wrap").innerHTML = renderInspectionRows(list);
+      document.querySelectorAll("[data-view-inspection]").forEach(el=>{
+        el.addEventListener("click", ()=> goto("inspection-detail", {inspectionId: el.getAttribute("data-view-inspection")}));
+      });
+    }
+    if(search){ search.addEventListener("input", applyFilter); fStatus.addEventListener("change", applyFilter); fCat.addEventListener("change", applyFilter); }
+  }
+
+  if(state.view==="new-inspection") bindWizard();
+}
+
+function bindWizard(){
+  const wi = state.newInspection;
+
+  // Step 1
+  const next1 = document.getElementById("wiz-next-1");
+  if(next1) next1.addEventListener("click", ()=>{
+    wi.product.name = document.getElementById("f-name").value.trim() || "Unnamed Product";
+    wi.product.brand = document.getElementById("f-brand").value.trim();
+    wi.product.manufacturer = document.getElementById("f-mfr").value.trim() || "Not specified";
+    wi.product.category = document.getElementById("f-cat").value;
+    wi.product.batch = document.getElementById("f-batch").value.trim();
+    wi.product.location = document.getElementById("f-loc").value.trim();
+    wi.step = 2;
+    render();
+  });
+
+  // Step 2 uploads
+  document.querySelectorAll("[data-upload-slot]").forEach(input=>{
+    input.addEventListener("change", (e)=>{
+      const slot = input.getAttribute("data-upload-slot");
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        wi.images = wi.images.filter(i=>i.slot!==slot);
+        wi.images.push({slot, dataUrl: reader.result});
+        render();
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+  document.querySelectorAll("[data-remove-slot]").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      const slot = btn.getAttribute("data-remove-slot");
+      wi.images = wi.images.filter(i=>i.slot!==slot);
+      render();
+    });
+  });
+  const back2 = document.getElementById("wiz-back-2");
+  if(back2) back2.addEventListener("click", ()=>{ wi.step=1; render(); });
+
+  const analyzeBtn = document.getElementById("wiz-analyze");
+  if(analyzeBtn) analyzeBtn.addEventListener("click", ()=>{
+    wi.step = 3; wi.processingPct = 0; wi.processingStepIdx = 0; wi.processingDone = false;
+    render();
+    runProcessingAnimation();
+  });
+
+  // Step 3 OCR results
+  const back3 = document.getElementById("wiz-back-3");
+  if(back3) back3.addEventListener("click", ()=>{ wi.step=2; render(); });
+  const toChecklist = document.getElementById("wiz-to-checklist");
+  if(toChecklist) toChecklist.addEventListener("click", ()=>{ wi.step=4; wi.substep4="checklist"; render(); });
+
+  // Step 4 sub-panels
+  const backChecklist = document.getElementById("wiz-back-checklist");
+  if(backChecklist) backChecklist.addEventListener("click", ()=>{ wi.step=3; render(); });
+  const toViolations = document.getElementById("wiz-to-violations");
+  if(toViolations) toViolations.addEventListener("click", ()=>{ wi.substep4="violations"; render(); });
+  const backViol = document.getElementById("wiz-back-viol");
+  if(backViol) backViol.addEventListener("click", ()=>{ wi.substep4="checklist"; render(); });
+  const toScore = document.getElementById("wiz-to-score");
+  if(toScore) toScore.addEventListener("click", ()=>{ wi.substep4="score"; render(); });
+  const backScore = document.getElementById("wiz-back-score");
+  if(backScore) backScore.addEventListener("click", ()=>{ wi.substep4="violations"; render(); });
+  const toOfficer = document.getElementById("wiz-to-officer");
+  if(toOfficer) toOfficer.addEventListener("click", ()=>{ wi.substep4="officer"; render(); });
+  const backOfficer = document.getElementById("wiz-back-officer");
+  if(backOfficer) backOfficer.addEventListener("click", ()=>{ wi.substep4="score"; render(); });
+
+  document.querySelectorAll("[data-verify]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const idx = btn.getAttribute("data-verify");
+      const action = btn.getAttribute("data-action");
+      wi.verifications[idx] = action;
+      render();
+    });
+  });
+
+  const finalizeBtn = document.getElementById("wiz-finalize");
+  if(finalizeBtn) finalizeBtn.addEventListener("click", async ()=>{
+    wi.remarks = document.getElementById("f-remarks").value;
+    const a = wi.analysis;
+    const savedId = `INS-${2100 + state.storedInspections.length}`;
+    wi.savedId = savedId;
+    wi.finalized = true;
+    const record = {
+      id: savedId, product: wi.product.name, brand: wi.product.brand || "—", manufacturer: wi.product.manufacturer,
+      category: wi.product.category, icon: "📦", inspector: wi.product.inspector, inspectorId: state.user.id,
+      date: new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}),
+      location: wi.product.location || "Not specified", score: a.score, status: a.finalStatus,
+      violations: a.violations.map((v,idx)=>({...v, verification: wi.verifications[idx]||"pending"})),
+      batch: wi.product.batch || "—", finalized:true,
+    };
+    state.storedInspections.unshift(record);
+    await saveStorage();
+    wi.step = 5;
+    showToast(a.finalStatus==="violation" ? "Inspection finalized — potential violation flagged." : "Inspection finalized successfully.", a.finalStatus==="violation"?"violation":"ok");
+    render();
+  });
+
+  const downloadBtn = document.getElementById("wiz-download-json");
+  if(downloadBtn) downloadBtn.addEventListener("click", ()=>{
+    const data = JSON.stringify({product:wi.product, analysis:wi.analysis, remarks:wi.remarks, verifications:wi.verifications}, null, 2);
+    const blob = new Blob([data], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href=url; a.download = `${wi.savedId||'report'}.json`; a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+function runProcessingAnimation(){
+  const wi = state.newInspection;
+  const totalSteps = PROCESSING_STEPS.length;
+  let tick = 0;
+  const interval = setInterval(()=>{
+    tick++;
+    wi.processingPct = Math.min(100, Math.round((tick/ (totalSteps*1.0)) * 100 * (10/9) ));
+    wi.processingStepIdx = Math.min(totalSteps, Math.floor((tick/ (totalSteps)) * totalSteps));
+    if(tick >= totalSteps){
+      clearInterval(interval);
+      wi.processingPct = 100;
+      wi.processingStepIdx = totalSteps;
+      wi.processingDone = true;
+      wi.analysis = generateMockAnalysis(wi);
+      showToast("Analysis complete.","ok");
+    }
+    render();
+  }, 420);
+}
+
+/* ============================= INIT ============================= */
+
+async function init(){
+  await loadStorage();
+  render();
+}
+init();
+
+})();
+</script>
